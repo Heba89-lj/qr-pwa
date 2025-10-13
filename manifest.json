@@ -1,10 +1,10 @@
 {
-  "name": "Google Drive QR App",
-  "short_name": "Drive QR",
-  "start_url": "./index.html",
+  "name": "QR PWA",
+  "short_name": "QR",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#007bff",
+  "theme_color": "#6200ee",
   "icons": [
     {
       "src": "icon-192.png",
