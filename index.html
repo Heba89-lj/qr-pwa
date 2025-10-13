@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8">
+  <title>Google Drive QR App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- 🔗 ملف الـ Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#007bff">
+
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      direction: rtl;
+      background: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+    }
+    h2 {
+      color: #007bff;
+      margin-bottom: 20px;
+    }
+    .section {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    button {
+      padding: 10px 20px;
+      border-radius: 6px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #qrcode {
+      margin-top: 20px;
+    }
+    video {
+      width: 100%;
+      max-width: 480px;
+      border-radius: 10px;
+      margin-top: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #msg {
+      margin-top: 10px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📁 تطبيق فتح ملف Google Drive عبر QR</h2>
+
+  <!-- ✅ كود QR مباشر -->
+  <div class="section">
+    <h3>🎯 امسح الكود لفتح الملف</h3>
+    <div id="qrcode"></div>
+    <p>أو <a href="https://drive.google.com/file/d/1TXUALKeDTRD4gwHzqo8RFVJChScAxooq/view" target="_blank">اضغطي هنا لفتح الملف</a>.</p>
+  </div>
+
+  <!-- 📷 قسم المستخدمين -->
+  <div class="section" id="userSection">
+    <h3>👩‍🎓 امسحي كود QR بالكاميرا</h3>
+    <video id="camera" playsinline></video><br>
+    <button id="startScan">تشغيل الكاميرا</button>
+    <div id="msg">اضغطي على الزر لتشغيل الكاميرا</div>
+  </div>
+
+  <!-- المكتبات -->
+  <script src="https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/qr-scanner@1.4.2/qr-scanner.umd.min.js"></script>
+
+  <script>
+    const link = "https://drive.google.com/file/d/1TXUALKeDTRD4gwHzqo8RFVJChScAxooq/view";
+    new QRCode(document.getElementById("qrcode"), { text: link, width: 200, height: 200 });
+
+    const video = document.getElementById("camera");
+    const startBtn = document.getElementById("startScan");
+    const msg = document.getElementById("msg");
+    let qrScanner = null;
+
+    function onDecode(result) {
+      msg.textContent = "✅ تم قراءة الكود... جاري فتح الملف";
+      if (qrScanner) qrScanner.stop();
+      window.open(result, "_blank");
+    }
+
+    startBtn.addEventListener("click", async () => {
+      try {
+        qrScanner = new QrScanner(video, res => onDecode(res));
+        await qrScanner.start();
+        msg.textContent = "وجهي الكاميرا نحو كود الـ QR...";
+        startBtn.style.display = "none";
+      } catch (err) {
+        msg.textContent = "حدث خطأ: " + err.message;
+      }
+    });
+
+    // 🔹 تسجيل الـ Service Worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js")
+        .then(() => console.log("✅ Service Worker مسجل"))
+        .catch(err => console.log("❌ خطأ في SW:", err));
+    }
+  </script>
+</body>
+</html>
+
