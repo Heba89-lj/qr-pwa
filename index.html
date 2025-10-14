@@ -201,10 +201,34 @@
         .then(() => console.log("✅ Service Worker مسجل"))
         .catch(err => console.log("❌ خطأ في SW:", err));
     }
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+
+// حدث قبل تثبيت التطبيق
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();       // منع المتصفح من إظهار نافذة التثبيت التلقائية
+  deferredPrompt = e;
+  installBtn.style.display = 'inline-block'; // أظهر زر التنزيل
+});
+
+// عند الضغط على زر التثبيت
+installBtn.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt(); // عرض نافذة تثبيت التطبيق
+  const choiceResult = await deferredPrompt.userChoice;
+  if (choiceResult.outcome === 'accepted') {
+    console.log('✅ المستخدم ثبت التطبيق');
+  } else {
+    console.log('❌ المستخدم رفض التثبيت');
+  }
+  deferredPrompt = null;
+  installBtn.style.display = 'none'; // أخفي الزر بعد الاختيار
+});
 
 
   </script>
 </body>
 </html>
+
 
 
