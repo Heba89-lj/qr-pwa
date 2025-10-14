@@ -133,6 +133,21 @@
       color: var(--primary);
       font-weight: bold;
     }
+
+    #installBtn {
+  display: inline-block;
+  padding: 12px 25px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+  z-index: 9999; /* تأكد إن الزر فوق أي عناصر تانية */
+  position: relative;
+}
+
   </style>
 </head>
 
@@ -145,7 +160,7 @@
     <div class="section">
       <h3>🎯 امسح الكود لفتح الملف</h3>
       <div id="qrcode"></div>
-      <p>أو <a href="https://drive.google.com/file/d/1TXUALKeDTRD4gwHzqo8RFVJChScAxooq/view" target="_blank">اضغطي هنا لفتح الملف مباشرة</a></p>
+      <p>أو <a href="main.html" target="_blank">اضغطي هنا لفتح الملف مباشرة</a></p>
     </div>
 
     <div class="section" id="userSection">
@@ -170,7 +185,7 @@
   <script src="https://unpkg.com/qr-scanner@1.4.2/qr-scanner.umd.min.js"></script>
 
   <script>
-    const link = "https://drive.google.com/file/d/1TXUALKeDTRD4gwHzqo8RFVJChScAxooq/view";
+    const link = "main.html";
     new QRCode(document.getElementById("qrcode"), { text: link, width: 200, height: 200 });
 
     const video = document.getElementById("camera");
@@ -229,6 +244,4 @@ installBtn.addEventListener('click', async () => {
   </script>
 </body>
 </html>
-
-
 
